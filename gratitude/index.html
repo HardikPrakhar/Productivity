@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gratitude</title>
+    <link rel="icon" href="..\logo.png"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+    </script>
+</head>
+
+<body>
+    <!-- Html -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="..\index.html">Productivity</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="..\index.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="..\todo\index.html">To-Do</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">Gratitude</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="..\homework\index.html">Homework</a>
+                </li>
+                
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+
+
+        <h2 class="text-center">Gratitude</h2>
+        <hr>
+
+        <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" class="form-control" placeholder="Date" id="date" aria-describedby="emailHelp">
+        </div>
+        <div class="form-group">
+            <label for="note">Note</label>
+            <input type="text" class="form-control" placeholder="Write a note" id="note">
+        </div>
+
+        <button type="submit" id="add" class="btn btn-primary">Add</button>
+        <hr>
+        <div id="items" class="my-4">
+            <h2>Your Notes</h2>
+        </div>
+
+        <hr>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" class="col-sm-3">S.No.</th>
+                    <th scope="col" class="col-sm-5">Date</th>
+                    <th scope="col" class="col-sm-7">Note</th>
+                    <th scope="col" class="col-sm-2">Action</th>
+
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Coffee</td>
+                    <td>Get some Coffee</td>
+                    <td><button class="btn btn-sm btn-primary">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
+
+
+
+
+
+
+    <!-- CSS -->
+    <style>
+        #date {
+            width: 22vh;
+        }
+
+        table {
+            
+            overflow: auto;
+            overflow-x: hidden;
+            table-layout: fixed;
+            background-color: rgb(156, 156, 156);
+        }
+
+        td {
+            word-wrap: break-word;
+        }
+
+        body {
+            background-image: linear-gradient(rgb(156, 156, 156),rgb(73, 73, 73));
+            background-size: 300px 800px;
+            color: whitesmoke;
+        }
+        
+    </style>
+
+
+
+
+    <!-- Javascript -->
+    <script>
+        function getAndUpdate() {
+            let date = document.getElementById('date').value;
+            let note = document.getElementById('note').value;
+            if (note.length == 0 || date.length == 0) {
+                alert("Please fill both the details !!")
+            } else {
+                if (localStorage.getItem('itemJson') == null) {
+                    itemJsonArray = [];
+                    itemJsonArray.push([date, note])
+                    localStorage.setItem('itemJson', JSON.stringify(itemJsonArray));
+
+                } else {
+                    itemJsonArrayStr = localStorage.getItem('itemJson');
+                    itemJsonArray = JSON.parse(itemJsonArrayStr);
+                    itemJsonArray.push([date, note])
+                    localStorage.setItem('itemJson', JSON.stringify(itemJsonArray));
+
+                }
+
+            }
+
+
+
+
+            update();
+        }
+
+        function update() {
+            if (localStorage.getItem('itemJson') == null) {
+                itemJsonArray = [];
+
+                localStorage.setItem('itemJson', JSON.stringify(itemJsonArray));
+
+            } else {
+                itemJsonArrayStr = localStorage.getItem('itemJson');
+                itemJsonArray = JSON.parse(itemJsonArrayStr);
+            }
+            date.value = "";
+            note.value = "";
+            tableBody = document.getElementById("tableBody");
+            let str = "";
+            itemJsonArray.forEach((element, index) => {
+                str += `
+            <tr>
+            <th scope="row">${index+1}</th>
+            <td>${element[0]}</td>
+            <td>${element[1]}</td>
+            <td><button class="btn btn-sm btn-primary" onclick="deleted(${index})">Delete</button></td>
+         </tr>`;
+            });
+            tableBody.innerHTML = str;
+        }
+        console.log("Welcome to Gratitude");
+        add = document.getElementById("add");
+        add.addEventListener("click", getAndUpdate);
+        update();
+
+        function deleted(itemIndex) {
+            console.log(itemIndex);
+            itemJsonArrayStr = localStorage.getItem('itemJson');
+            itemJsonArray = JSON.parse(itemJsonArrayStr);
+            itemJsonArray.splice(itemIndex, 1);
+            localStorage.setItem('itemJson', JSON.stringify(itemJsonArray));
+            update();
+        }
+    </script>
+</body>
+
+</html>
